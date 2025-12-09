@@ -12,7 +12,7 @@
 
 
 
-![ERD of the project](images/ERD.png)
+![ERD of the project](ERD.png)
 =======
 
 
