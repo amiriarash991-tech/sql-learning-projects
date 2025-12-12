@@ -21,3 +21,85 @@ go
  inner join orderdetails on orders.orderid = orderdetails.orderid
 inner join  products on orderdetails.productid = products.productid
 order by orders.orderdate desc;
+
+
+use onlinestore
+go
+
+ 
+
+select products.productid,products.productname  
+from products
+right join orderdetails
+on products.productid = orderdetails.orderdetailsid
+
+select * from customers,products,orderdetails
+
+
+
+select customers.customername,orders.orderid
+from customers
+left join orders
+on customers.customerid = orders.customerid
+
+
+select customers.customername,orders.orderid,products.productid,orderdetails.quantity
+from customers
+inner join orders
+on customers.customerid = orders.orderid
+inner join orderdetails 
+on orders.orderid = orderdetails.orderid
+inner join products
+on orderdetails.productid = products.productid
+
+
+SELECT 
+    Products.ProductName,
+    SUM(OrderDetails.Quantity) AS TotalQuantity
+FROM Products
+INNER JOIN OrderDetails
+    ON Products.ProductID = OrderDetails.ProductID
+GROUP BY Products.ProductName
+HAVING SUM(OrderDetails.Quantity) > 6;
+
+
+
+--------subquerys
+
+select customername 
+from customers
+where customerid in(
+select customerid from orders
+group by customerid 
+Having count(orderid) < 2
+)
+
+ select productname 
+ from products
+ where productid in (
+ select productid from orderdetails
+ group by productid
+ having sum(quantity) > 3
+ );
+ 
+
+  select productname,price
+ from products
+where price > (
+select avg(price)
+from products
+);
+
+SELECT ProductName, UnitsInStock
+FROM Products
+WHERE UnitsInStock > (
+    SELECT MAX(Quantity)
+    FROM OrderDetails
+);
+
+
+select productname,price 
+from products
+where  price > (select avg(price) from  products
+where  price < 20
+);
