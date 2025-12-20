@@ -103,3 +103,46 @@ from products
 where  price > (select avg(price) from  products
 where  price < 20
 );
+
+------not exists
+select  productname
+from products
+where not exists(
+select 1 
+from orderdetails
+where orderdetails.productid = products.productid
+);
+
+ -------ALL
+ select productname,price
+ from products
+ where price > ALL(
+ select price 
+ from products
+ where price < 400
+ );
+ -----------------------
+SELECT CustomerName
+FROM Customers c
+WHERE CustomerID IN (
+    SELECT o.CustomerID
+    FROM Orders o
+    JOIN OrderDetails od ON o.OrderID = od.OrderID
+    WHERE od.ProductID IN (
+        SELECT ProductID
+        FROM Products
+        WHERE Price < (SELECT MAX(Price) FROM Products)
+    )
+);
+
+select productname
+from products
+where productid in(
+select  orderdetails.productid
+from orders
+join orderdetails on orders.orderid = orderdetails.orderid
+group by orderdetails.productid,orders.customerid
+having count(*) < 2
+);
+ 
+ 
